@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#05090f">
+  <title>AetherBrackets™ Loading</title>
+  <style>
+    @property --highlight {
+      syntax: "<percentage>";
+      inherits: false;
+      initial-value: 3%;
+    }
+
+    :root {
+      color-scheme: dark;
+      --duration: 2.05s;
+      --stagger: 0.075s;
+      --primary: #2dd4f0;
+      --rise: clamp(4px, 0.45em, 7px);
+      --fall: clamp(3px, 0.32em, 5px);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 50% 43%, rgba(45, 212, 240, 0.09), transparent 28rem),
+        radial-gradient(circle at 38% 55%, rgba(101, 112, 255, 0.055), transparent 24rem),
+        linear-gradient(145deg, #070c13 0%, #03060a 100%);
+      color: #e8fbff;
+      font-family: Inter, "SF Pro Display", "Segoe UI", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    .loader {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: min(100%, 470px);
+      min-height: 142px;
+      padding: 30px 26px 24px;
+      isolation: isolate;
+      border: 1px solid rgba(136, 232, 255, 0.105);
+      border-radius: 22px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 38%),
+        rgba(7, 13, 21, 0.68);
+      box-shadow:
+        0 22px 70px rgba(0, 0, 0, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .loader::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 20% 10%;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(45, 212, 240, 0.09), transparent 70%);
+      filter: blur(18px);
+      pointer-events: none;
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: clamp(1.5px, 0.65vw, 4px);
+      min-height: 48px;
+      padding: 6px 0 11px;
+      white-space: nowrap;
+      font-size: clamp(1rem, 5.4vw, 1.68rem);
+      font-weight: 720;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .glyph {
+      --highlight: 3%;
+      position: relative;
+      display: inline-block;
+      flex: 0 0 auto;
+      color: var(--tone);
+      color: color-mix(in srgb, var(--tone), #c9fbff var(--highlight));
+      filter: brightness(0.92) saturate(0.98);
+      text-shadow: 0 0 3px rgba(45, 212, 240, 0.08);
+      transform: translate3d(0, 0, 0);
+      transform-origin: 50% 50%;
+      will-change: transform, filter, color;
+      animation: letter-wave var(--duration) linear infinite;
+      animation-delay: calc(-1 * var(--duration) + var(--i) * var(--stagger));
+    }
+
+    .glyph::after {
+      content: attr(data-char);
+      position: absolute;
+      top: 88%;
+      left: 0;
+      color: currentColor;
+      opacity: 0.075;
+      transform: scaleY(-0.42);
+      transform-origin: top;
+      filter: blur(0.35px);
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.65), transparent 78%);
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.65), transparent 78%);
+    }
+
+    .glyph.trademark {
+      align-self: flex-start;
+      margin-top: -0.06em;
+      margin-left: 0.02em;
+      font-size: 0.49em;
+      font-weight: 650;
+      opacity: 0.92;
+    }
+
+    .label {
+      margin-top: 4px;
+      padding-left: 0.32em;
+      color: rgba(183, 225, 235, 0.56);
+      font-size: clamp(0.52rem, 1.8vw, 0.61rem);
+      font-weight: 420;
+      line-height: 1;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      animation: label-breathe var(--duration) ease-in-out infinite;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+
+    @keyframes letter-wave {
+      0%,
+      100% {
+        --highlight: 3%;
+        transform: translate3d(0, 0, 0);
+        filter: brightness(0.92) saturate(0.98);
+        text-shadow: 0 0 3px rgba(45, 212, 240, 0.08);
+      }
+
+      12.5% {
+        --highlight: 10%;
+        transform: translate3d(0, calc(var(--rise) * -0.7), 0);
+        filter: brightness(1.04) saturate(1);
+        text-shadow: 0 0 5px rgba(45, 212, 240, 0.14);
+      }
+
+      25% {
+        --highlight: 20%;
+        transform: translate3d(0, calc(var(--rise) * -1), 0);
+        filter: brightness(1.14) saturate(1.01);
+        text-shadow:
+          0 0 6px rgba(107, 232, 255, 0.2),
+          0 0 13px rgba(58, 160, 255, 0.08);
+      }
+
+      37.5% {
+        --highlight: 10%;
+        transform: translate3d(0, calc(var(--rise) * -0.7), 0);
+        filter: brightness(1.04) saturate(1);
+        text-shadow: 0 0 5px rgba(45, 212, 240, 0.14);
+      }
+
+      50% {
+        --highlight: 3%;
+        transform: translate3d(0, 0, 0);
+        filter: brightness(0.92) saturate(0.98);
+        text-shadow: 0 0 3px rgba(45, 212, 240, 0.08);
+      }
+
+      62.5% {
+        --highlight: 1%;
+        transform: translate3d(0, calc(var(--fall) * 0.7), 0);
+        filter: brightness(0.86) saturate(0.94);
+        text-shadow: 0 0 2px rgba(45, 212, 240, 0.055);
+      }
+
+      75% {
+        --highlight: 0%;
+        transform: translate3d(0, var(--fall), 0);
+        filter: brightness(0.81) saturate(0.92);
+        text-shadow: 0 0 2px rgba(45, 212, 240, 0.04);
+      }
+
+      87.5% {
+        --highlight: 1%;
+        transform: translate3d(0, calc(var(--fall) * 0.7), 0);
+        filter: brightness(0.86) saturate(0.94);
+        text-shadow: 0 0 2px rgba(45, 212, 240, 0.055);
+      }
+    }
+
+    @keyframes label-breathe {
+      0%,
+      100% {
+        opacity: 0.56;
+      }
+      50% {
+        opacity: 0.76;
+      }
+    }
+
+    @media (max-width: 420px) {
+      body {
+        padding: 14px;
+      }
+
+      .loader {
+        min-height: 124px;
+        padding: 27px 14px 20px;
+        border-radius: 18px;
+      }
+
+      .brand {
+        gap: 1.5px;
+        min-height: 42px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .glyph,
+      .label {
+        animation: none;
+      }
+
+      .glyph {
+        --highlight: 8%;
+        transform: none;
+        filter: brightness(1);
+      }
+
+      .label {
+        opacity: 0.62;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="loader" role="status" aria-live="polite" aria-label="AetherBrackets is loading">
+    <span class="sr-only">AetherBrackets is loading</span>
+
+    <div class="brand" aria-hidden="true">
+      <span class="glyph" data-char="A" style="--i:0; --tone:#2DD4F0;">A</span>
+      <span class="glyph" data-char="e" style="--i:1; --tone:#32D0F3;">e</span>
+      <span class="glyph" data-char="t" style="--i:2; --tone:#38CCF7;">t</span>
+      <span class="glyph" data-char="h" style="--i:3; --tone:#43C6FA;">h</span>
+      <span class="glyph" data-char="e" style="--i:4; --tone:#50BFFD;">e</span>
+      <span class="glyph" data-char="r" style="--i:5; --tone:#60B6FF;">r</span>
+      <span class="glyph" data-char="B" style="--i:6; --tone:#70ABFF;">B</span>
+      <span class="glyph" data-char="r" style="--i:7; --tone:#809FFF;">r</span>
+      <span class="glyph" data-char="a" style="--i:8; --tone:#8E94FF;">a</span>
+      <span class="glyph" data-char="c" style="--i:9; --tone:#868EFF;">c</span>
+      <span class="glyph" data-char="k" style="--i:10; --tone:#778FFF;">k</span>
+      <span class="glyph" data-char="e" style="--i:11; --tone:#659EFF;">e</span>
+      <span class="glyph" data-char="t" style="--i:12; --tone:#50B4FC;">t</span>
+      <span class="glyph" data-char="s" style="--i:13; --tone:#3BC7F6;">s</span>
+      <span class="glyph trademark" data-char="™" style="--i:14; --tone:#2DD4F0;">™</span>
+    </div>
+
+    <div class="label" aria-hidden="true">Loading</div>
+  </main>
+</body>
+</html>
